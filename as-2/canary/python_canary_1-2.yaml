@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aufnito-canary-2
+  namespace: aufnito
+  labels:
+    app: aufnito-canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aufnito-canary
+  template:
+    metadata:
+      labels:
+        app: aufnito-canary
+    spec:
+      containers:
+      - name: aufnito-canary
+        image: gopinath1402/augnito_py:1.2
+        ports:
+        - containerPort: 80
+        livenessProbe:
+         exec:
+          command:
+          - cat 
+          - /python/augnito.py
+         initialDelaySeconds: 5
+         periodSeconds: 5
+        readinessProbe:
+         httpGet:
+          path: /
+          port: 80
+         initialDelaySeconds: 5
+         periodSeconds: 5
